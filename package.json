@@ -12,6 +12,7 @@
   "dependencies": {
     "@prisma/client": "^5.5.2",
     "axios": "^1.6.1",
+    "axios-retry": "^3.8.1",
     "next": "14.0.2",
     "node-cache": "^5.1.2",
     "react": "^18",

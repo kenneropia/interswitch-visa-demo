@@ -40,11 +40,7 @@ export default function Home() {
     success: false,
     data: {},
   });
-  const router = useRouter();
 
-  if (state.success) {
-    router.push("/");
-  }
   return (
     <form
       action={formAction}
