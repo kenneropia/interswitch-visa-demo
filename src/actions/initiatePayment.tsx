@@ -8,6 +8,7 @@ export async function initiatePaymentAction(state: any, formData: FormData) {
   const amount = +(formData.get("amount") || 300) as number;
 
   const payload: PaymentInitiateResponse = await makePurchaseRequest(amount);
+  
   await prismasdb.payment.create({
     data: {
       transactionRef: payload.transactionRef,

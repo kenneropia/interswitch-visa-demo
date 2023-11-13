@@ -37,6 +37,7 @@ export const makePurchaseRequest = async (amount: number) => {
   };
   try {
     const response = await axios.post(url, data, { headers });
+    console.log(`1_INITIATE_PAYMENT: ${response.data}`);
 
     return response.data;
   } catch (error: any) {
@@ -66,7 +67,6 @@ export const makePurchaseOtpAuthRequest = async (
 
   try {
     const response = await axios.post(url, data, { headers });
-    console.log("RESPONSE_FOR_OTP_AUTH", response?.data);
 
     return response?.data as PurchaseOtpAuthResponse;
   } catch (error: any) {

@@ -18,7 +18,12 @@ export default async function RedirectPage({
   const transactionDetails = JSON.parse(
     pendingTransaction.jsonData
   ) as PaymentInitiateResponse;
-
+  const threeDS = {
+    ascUrl: transactionDetails.ACSUrl,
+    jwt: transactionDetails.jwt,
+    md: transactionDetails.MD,
+  };
+  console.log(`2_LOADING_3DS_PAGE: ${threeDS}`);
   return (
     <div className="grid place-items-center h-screen">
       <div className="flex flex-col space-y-5 items-center justify-center">
