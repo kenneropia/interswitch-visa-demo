@@ -1,14 +1,10 @@
 import { redirect } from "next/navigation";
 
-import {
-  GetTransactionResponse,
-  PaymentInitiateResponse,
-  PaymentStatus,
-} from "@/utils/types";
+import { PaymentStatus } from "@/utils/types";
 import prismasdb from "@/utils/prisma";
 import { getTransaction } from "@/utils/http/payments";
 
-export default async function RedirectPage({
+export default async function GetTransactionPage({
   params,
 }: {
   params: { transactionRef: string };
@@ -21,16 +17,13 @@ export default async function RedirectPage({
   });
 
   if (!transaction) return redirect("/");
-  const transactionDetails = JSON.parse(
-    transaction.jsonData
-  ) as GetTransactionResponse;
-  console.log(transactionDetails);
+  const transactionDetails = JSON.parse(transaction.jsonData);
   const transactionFromInterswitch = await getTransaction({
-    amount: transactionDetails.Amount,
+    amount: +transactionDetails.amount,
     merchantCode: process.env.INTERSWITCH_MERCHANT_CODE as string,
     transactionReference: transaction.transactionRef,
   });
-  console.log("transaction", transactionFromInterswitch);
+  console.log("6_GET_TRANSACTION_FROM_INTERSWITCH", transactionFromInterswitch);
 
   return (
     <div className="grid place-items-center h-screen">

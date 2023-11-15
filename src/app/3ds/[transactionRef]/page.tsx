@@ -18,10 +18,21 @@ export default async function RedirectPage({
   const transactionDetails = JSON.parse(
     pendingTransaction.jsonData
   ) as PaymentInitiateResponse;
-
+  const threeDS = {
+    ascUrl: transactionDetails.ACSUrl,
+    jwt: transactionDetails.jwt,
+    md: transactionDetails.MD,
+  };
+  console.log(`2_LOADING_3DS_PAGE: ${threeDS}`);
   return (
     <div className="grid place-items-center h-screen">
-      <div className="border-gray-300 h-20 w-20 animate-spin rounded-full border-8 border-t-gray-900" />
+      <div className="flex flex-col space-y-5 items-center justify-center">
+        <div className="border-gray-300 h-20 w-20 animate-spin rounded-full border-8 border-t-gray-900" />
+        <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-gray-400">
+          3D secure page is loading
+        </p>
+      </div>
+
       <RedirectForm
         ascUrl={transactionDetails.ACSUrl}
         jwt={transactionDetails.jwt}

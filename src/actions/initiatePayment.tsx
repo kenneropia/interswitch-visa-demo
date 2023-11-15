@@ -2,10 +2,14 @@
 import { makePurchaseRequest } from "@/utils/http/payments";
 import prismasdb from "@/utils/prisma";
 import { PaymentInitiateResponse, PaymentStatus } from "@/utils/types";
+import { redirect } from "next/navigation";
 
 export async function initiatePaymentAction(state: any, formData: FormData) {
-  const payload: PaymentInitiateResponse = await makePurchaseRequest();
-  const res = await prismasdb.payment.create({
+  const amount = +(formData.get("amount") || 300) as number;
+
+  const payload: PaymentInitiateResponse = await makePurchaseRequest(amount);
+  
+  await prismasdb.payment.create({
     data: {
       transactionRef: payload.transactionRef,
       status: PaymentStatus.PENDING,
@@ -15,5 +19,5 @@ export async function initiatePaymentAction(state: any, formData: FormData) {
 
   if (state.success) return state;
 
-  return { success: true, data: { transactionRef: payload.transactionRef } };
+  return redirect(`/3ds/${payload.transactionRef}`);
 }

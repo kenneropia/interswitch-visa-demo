@@ -36,7 +36,7 @@ class AuthManager {
         },
       }
     );
-
+    console.log(`0_TOKEN_GENERATION: ${data}`);
     return data;
   };
 

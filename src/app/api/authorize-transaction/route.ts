@@ -1,19 +1,25 @@
 import { makePurchaseOtpAuthRequest } from "@/utils/http/payments";
 import prismasdb from "@/utils/prisma";
 import { PaymentStatus, ThreeDSResponse } from "@/utils/types";
-import { RedirectType, redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 import qs from "querystring";
+
 export async function POST(request: Request, response: Response) {
   const rawData = await request.text();
   const threeDSResponse = qs.parse(rawData) as unknown as ThreeDSResponse;
+
+  console.log("3_3DS_DATA_FROM_CARDINAL", threeDSResponse);
+
   const oTPauth = await makePurchaseOtpAuthRequest({
     paymentId: threeDSResponse.MD,
     transactionId: threeDSResponse.TransactionId,
   });
+
+  console.log("4_AUTH_OTP", oTPauth);
+
   if (!oTPauth) {
     console.log("oTPauth Not Set");
-    return NextResponse.redirect(`${request.headers.get("host")}`);
+    return NextResponse.redirect(process.env.BASE_URL as string);
   }
   if (oTPauth?.responseCode == "00") {
     await prismasdb?.payment.update({
@@ -36,12 +42,17 @@ export async function POST(request: Request, response: Response) {
       },
     });
     console.log("oTPauth ERROR");
-    return NextResponse.redirect(`${request.headers.get("host")}`);
   }
   console.log(
-    `${request.headers.get("host")}/check-transaction/${oTPauth.transactionRef}`
+    "5_REDIRECT_TO_CONFIRM_TRANSACTION_PAGE",
+    `${process.env.BASE_URL as string}/check-transaction/${
+      oTPauth.transactionRef
+    }`
   );
   return NextResponse.redirect(
-    `${request.headers.get("host")}/check-transaction/${oTPauth.transactionRef}`
+    `${process.env.BASE_URL as string}/check-transaction/${
+      oTPauth.transactionRef
+    }`,
+    302
   );
 }
