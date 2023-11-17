@@ -1,5 +1,9 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Note!!
+
+To experience the full process flow, you need a live URL for the callback bit. You can enable this by setting the BASE_URL environment variable in the required environment file.
+
 ## Getting Started
 
 First, run the development server:
