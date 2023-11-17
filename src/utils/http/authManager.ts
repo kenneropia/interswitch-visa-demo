@@ -25,19 +25,23 @@ class AuthManager {
     ).toString("base64");
 
   private callTokenGenerationAPI = async () => {
-    const { data }: AxiosResponse<AccessTokenResponse> = await axios.post(
-      "https://apps.qa.interswitchng.com/passport/oauth/token",
-      { grant_type: "client_credentials" },
+    try {
+      const { data }: AxiosResponse<AccessTokenResponse> = await axios.post(
+        "https://apps.qa.interswitchng.com/passport/oauth/token",
+        { grant_type: "client_credentials" },
 
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: this.getAuthorizationHeader(),
-        },
-      }
-    );
-    console.log(`0_TOKEN_GENERATION: ${data}`);
-    return data;
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: this.getAuthorizationHeader(),
+          },
+        }
+      );
+      console.log(`0_TOKEN_GENERATION: ${data}`);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   async getToken() {
